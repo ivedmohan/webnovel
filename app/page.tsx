@@ -1,65 +1,96 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "framer-motion";
+import { books } from "@/lib/data";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { AuroraBackground } from "@/components/ui/aurora-background";
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-background">
+      {/* Hero Section with Aurora Background */}
+      <AuroraBackground>
+        <motion.div
+          initial={{ opacity: 0.0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="relative flex flex-col gap-4 items-center justify-center px-4"
+        >
+          <div className="text-3xl md:text-7xl font-bold dark:text-white text-center">
+            Discover Your Next <br /> Great Adventure
+          </div>
+          <div className="font-light text-base md:text-4xl dark:text-neutral-200 py-4 text-center">
+            Dive into thousands of web novels.
+          </div>
+          <div className="flex gap-4 justify-center">
+            <Button size="lg" className="bg-black dark:bg-white text-white dark:text-black rounded-full w-fit" asChild>
+              <Link href="/search">Browse Books</Link>
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-full w-fit" asChild>
+              <Link href="/books/1">Start Reading</Link>
+            </Button>
+          </div>
+        </motion.div>
+      </AuroraBackground>
+
+      {/* Featured Books Section with 3D Cards */}
+      <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
+        <h2 className="text-4xl font-bold mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-900 dark:from-neutral-200 dark:to-neutral-500">Featured Novels</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {books.map((book) => (
+            <CardContainer key={book.id} className="inter-var">
+              <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
+                <CardItem
+                  translateZ="50"
+                  className="text-xl font-bold text-neutral-600 dark:text-white"
+                >
+                  {book.title}
+                </CardItem>
+                <CardItem
+                  as="p"
+                  translateZ="60"
+                  className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300"
+                >
+                  {book.author}
+                </CardItem>
+                <CardItem translateZ="100" className="w-full mt-4">
+                  <img
+                    src={book.cover}
+                    height="1000"
+                    width="1000"
+                    className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl"
+                    alt="thumbnail"
+                  />
+                </CardItem>
+                <div className="flex justify-between items-center mt-20">
+                  <CardItem
+                    translateZ={20}
+                    as={Link}
+                    href={`/books/${book.id}`}
+                    target="__blank"
+                    className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
+                  >
+                    Read now →
+                  </CardItem>
+                  <CardItem
+                    translateZ={20}
+                    as="button"
+                    className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
+                  >
+                    {book.rating} ⭐
+                  </CardItem>
+                </div>
+              </CardBody>
+            </CardContainer>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
     </div>
   );
 }
